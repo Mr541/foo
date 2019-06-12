@@ -1,0 +1,87 @@
+{
+  "inbound": {
+    "port": 993,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "7b960556-db7c-11e8-8b32-bba2c55206e4",
+          "level": 1,
+          "alterId": 64,
+          "email": "zhetao"
+        },
+        {
+          "id": "38c970ae-db7d-11e8-a9cc-cb52456763dd",
+          "level": 1,
+          "alterId": 64,
+          "email": "other"
+        }
+      ]
+    }
+  },
+  "InboundDetour": [{
+    "port": 444,
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "7b960556-db7c-11e8-8b32-bba2c55206e4",
+          "level": 1,
+          "alterId": 64,
+          "email": "zhetao"
+        },
+        {
+          "id": "38c970ae-db7d-11e8-a9cc-cb52456763dd",
+          "level": 1,
+          "alterId": 64,
+          "email": "other"
+        }
+      ]
+    },
+    "streamSettings": {
+      "network": "kcp"
+    }
+  },
+  {
+    "tag": "tg-in",
+    "port": 443,
+    "protocol": "mtproto",
+    "settings": {
+      "users": [{"secret": "7b484c23db575c06faabecffd8b25bc3"}]
+    }
+  }],
+  "outbound": {
+    "protocol": "freedom",
+    "settings": {}
+  },
+  "outboundDetour": [
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
+    },
+    {
+      "tag": "tg-out",
+      "protocol": "mtproto",
+      "settings": {}
+    }
+  ],
+  "routing": {
+    "strategy": "rules",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",
+          "ip": ["geoip:private"],
+          "outboundTag": "blocked"
+        },
+	{
+        "type": "field",
+        "inboundTag": ["tg-in"],
+        "outboundTag": "tg-out"
+        }
+      ]
+    }
+  }
+}
+
